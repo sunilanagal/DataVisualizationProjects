@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Visualization of Titanic Dataset</title>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <style>
+      /* Title */
+      h2 {
+        text-align: center;
+      }
+
+</style>
+    
+    <script type="text/javascript">
+
+    function draw(data) 
+    {
+
+       "use strict";
+        var margin = 70,
+            width = 700 - margin,
+            height = 500 - margin;
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+            .append('g')
+            .attr('class','chart');
+
+    d3.select("body").append("h2").text("Data visualization of Titanic tragedy");
+
+    var myChart = new dimple.chart(svg, data);
+          
+    var x = myChart.addCategoryAxis("x", ["Pclass", "Sex"]);
+    
+    x.addOrderRule(['1', '2', '3']);
+
+    var y = myChart.addMeasureAxis("y", 'Survived');  
+    y.title = "Number of Passenger's (Survived/Perished)";
+    x.title = "Gender and Passenger's class";
+
+    var s = myChart.addSeries(["Pclass", "Sex", "Survived"], dimple.plot.bar);
+    s.aggregate = dimple.aggregateMethod.count;
+
+    myChart.addLegend(675, 50, 0, 100, "Right");
+
+    s.getTooltipText = function (e) {
+              if (e.aggField[2] == 1)
+               {return ["Count of Passengers Survived " + e.yValue,
+                        "Pclass:" + e.aggField[0],
+                        "Sex: " + e.aggField[1]];
+               }
+              else if (e.aggField[2] == 0)
+               {return["Count of Passengers Perished " + e.yValue,
+                       "Pclass:" + e.aggField[0],
+                       "Sex: " + e.aggField[1]];
+                       }
+        };
+
+
+    myChart.draw();
+  /*
+    Use D3 (not dimple.js) to update text for legends
+    */
+  d3.selectAll(".dimple-legend text")
+  .filter(function() {
+    return /^0/.test(d3.select(this).text());  // Check if text of legend begin with a "0"
+  })
+  .text("Perished");
+/*
+    Use D3 (not dimple.js) to load the CSV file
+    and pass the contents of it to the draw function
+    */
+  d3.selectAll(".dimple-legend text")
+  .filter(function() {
+    return /^1/.test(d3.select(this).text());  // Check if text of legend begin with a "1"
+  })
+  .text("Survived");
+  };
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the CSV file
+    and pass the contents of it to the draw function
+    */
+
+d3.csv("titanic_data.csv", 
+  function(d) { 
+            d['PassengerId'] =  +d['PassengerId']; 
+            d['Survived'] =  +d['Survived'];
+            d['Pclass'] = +d['Pclass'];
+            d['Sex'] = d['Sex'];
+            return d;
+          }, draw);
+
+  </script>
+</body>
+</html>

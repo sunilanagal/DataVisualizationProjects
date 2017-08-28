@@ -1,0 +1,15 @@
+Project Summary
+
+Name: Sunila Nagal
+
+Area of Study: Location - Honolulu, Hawaii
+
+Open Street Map URL:  https://www.openstreetmap.org/export#map=11/21.3252/-157.8018
+MapZen URL: https://mapzen.com/data/metro-extracts/metro/honolulu_hawaii/
+
+Objective: Audit and clean the data set, converting it from XML to JSON format
+
+References:
+Lesson from Udacity Course, “Data Wrangling with MongoDB”
+Python Software Documentation
+Open Street Map Wikipedia
